@@ -1,0 +1,51 @@
+﻿@model Practical_AddressBook1.Models.AddressBookLogs
+
+@{
+    ViewData["Title"] = "Update Person Data";
+    var errorMessage = TempData["errorMessage"]?.ToString();
+}
+
+<h3>@ViewData["Title"]?.ToString()</h3>
+<hr />
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger">
+        <b>Error:</b>
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="post" action="Edit" class="form-control mt-3" autocomplete="off">
+    <div class="mb-3">
+        <label class="form-label" asp-for="PersonID"></label>
+        <input type="text" class="form-control" asp-for="PersonID" readonly />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="PersonName"></label>
+        <input type="text" class="form-control" asp-for="PersonName" />
+        <span asp-validation-for="PersonName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="PersonAddress"></label>
+        <input type="text" class="form-control" asp-for="PersonAddress" />
+        <span asp-validation-for="PersonAddress" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="City"></label>
+        <input type="text" class="form-control" asp-for="City" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <div class="btn-group col-lg-12">
+            <button type="submit" class="btn btn-success">Update</button>
+            <a asp-controller="Address" asp-action="Index" class="btn btn-secondary" style="width: 150px;">Back to list</a>
+        </div>
+    </div>
+</form>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

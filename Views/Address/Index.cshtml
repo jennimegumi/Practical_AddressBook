@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Practical_AddressBook1.Models.AddressBookLogs>
+
+@{
+    ViewData["Title"] = "Address Book";
+    var errorMessage = TempData["errorMessage"]?.ToString();
+    var successMessage = TempData["successMessage"]?.ToString();
+}
+@if (!string.IsNullOrWhiteSpace(successMessage))
+{
+    <div class="alert alert-success">
+        <b>Success:</b> @successMessage
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger">
+        <b>Error:</b> @errorMessage
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<h1>Address Book Table</h1>
+
+<form><button asp-controller="Address" asp-action="Insert" class="btn btn-primary btn-lg">Create New Data</button></form>
+
+<div class="input-group">
+    <input id="search" type="text" onkeyup="searchName()" class="form-control" placeholder="Search address book" aria-label="Search" aria-describedby="search-addon">
+    <i class="bi bi-search" width="10px" height="10px"></i>
+</div>
+
+<table class="table" id="AddressList">
+    <thead>
+        <tr>
+            <th>Person ID</th>
+            <th>Person Name</th>
+            <th>Person Address</th>
+            <th>City</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PersonID</td>
+                    <td>@item.PersonName</td>
+                    <td>@item.PersonAddress</td>
+                    <td>@item.City</td>
+                    <td>
+                        <div>
+                            <a asp-controller="Address" asp-action="Edit" asp-route-id="@item.PersonID" class="btn btn-success">Edit</a>
+                            <a asp-controller="Address" asp-action="Delete" asp-route-id="@item.PersonID" class="btn btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">
+                        <div>
+                            Data is currently unavailable.
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+</table>
+
+<script>
+    function searchName() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value;
+        table = document.getElementById("AddressList");
+        tr = table.getElementsByTagName("tr");
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
